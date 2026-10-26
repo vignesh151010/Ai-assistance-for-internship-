@@ -1,0 +1,31 @@
+# Python & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+.DS_Store
+
+# Local SQLite databases & uploads
+*.db
+*.sqlite
+uploads/
+certificates/
+backend/uploads/
+backend/certificates/
+
+# Environment Variables & Secrets
+.env
+backend/.env
+!.env.example
