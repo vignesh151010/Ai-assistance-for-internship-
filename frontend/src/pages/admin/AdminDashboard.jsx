@@ -13,18 +13,25 @@ import {
   Cpu,
   Video,
   Database,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck,
+  Settings
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
+  const [autoStatus, setAutoStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await api.get('/dashboard/admin-stats');
-        setStats(res.data);
+        const [statsRes, autoRes] = await Promise.allSettled([
+          api.get('/dashboard/admin-stats'),
+          api.get('/automation/status')
+        ]);
+        if (statsRes.status === 'fulfilled') setStats(statsRes.value.data);
+        if (autoRes.status === 'fulfilled') setAutoStatus(autoRes.value.data);
       } catch (err) {
         console.error('Failed to load dashboard stats', err);
       } finally {
@@ -38,10 +45,12 @@ export const AdminDashboard = () => {
     return <div style={{ padding: '20px', fontWeight: 600 }}>Loading live dashboard analytics...</div>;
   }
 
+  const currentMode = autoStatus?.current_mode || 'ACTIVE';
+
   return (
     <div>
       {/* Page Title & Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a' }}>Executive Program Dashboard</h1>
           <p style={{ fontSize: '14px', color: '#64748b', marginTop: '4px' }}>
@@ -49,13 +58,59 @@ export const AdminDashboard = () => {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <Link to="/admin/import" className="btn btn-primary">
+          <Link to="/admin/automation" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Cpu size={16} />
+            <span>Automation Center</span>
+          </Link>
+          <Link to="/admin/import" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <FileSpreadsheet size={16} />
             <span>Import Candidates Excel</span>
           </Link>
-          <Link to="/admin/reviews" className="btn btn-secondary">
-            <Calendar size={16} />
-            <span>Schedule Review</span>
+        </div>
+      </div>
+
+      {/* Autonomous Lifecycle Banner */}
+      <div style={{
+        marginBottom: '24px',
+        padding: '16px 20px',
+        background: 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)',
+        borderRadius: '12px',
+        border: '1px solid #fed7aa',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '42px', height: '42px', borderRadius: '10px',
+            backgroundColor: '#ea580c', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', color: '#ffffff', boxShadow: '0 4px 12px rgba(234, 88, 12, 0.25)'
+          }}>
+            <Cpu size={22} />
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontWeight: 800, fontSize: '15px', color: '#9a3412' }}>
+                Autonomous Internship Lifecycle Engine
+              </span>
+              <span className={`badge ${currentMode === 'ACTIVE' ? 'badge-success' : 'badge-warning'}`} style={{ fontSize: '11px', textTransform: 'uppercase' }}>
+                ● Mode: {currentMode}
+              </span>
+            </div>
+            <div style={{ fontSize: '13px', color: '#c2410c', marginTop: '2px' }}>
+              Zero routine manual administration. Background worker: <strong>{autoStatus?.scheduler_running ? 'Online & Monitoring' : 'Standby'}</strong> &bull; Pending jobs: <strong>{autoStatus?.pending_jobs || 0}</strong> &bull; Active workflows: <strong>{autoStatus?.active_workflows || 0}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Link to="/admin/automation" className="btn btn-secondary" style={{ backgroundColor: '#ffffff', borderColor: '#fed7aa', color: '#9a3412', fontSize: '13px', padding: '6px 14px' }}>
+            Manage Engine & Jobs
+          </Link>
+          <Link to="/admin/settings" className="btn btn-secondary" style={{ backgroundColor: '#ffffff', borderColor: '#fed7aa', color: '#9a3412', fontSize: '13px', padding: '6px 14px' }}>
+            <Settings size={14} />
           </Link>
         </div>
       </div>

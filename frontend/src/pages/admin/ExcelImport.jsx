@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import {
   FileSpreadsheet,
@@ -8,7 +9,10 @@ import {
   ArrowRight,
   RefreshCw,
   Check,
-  FileCheck
+  FileCheck,
+  Download,
+  Cpu,
+  Users
 } from 'lucide-react';
 
 export const ExcelImport = () => {
@@ -114,7 +118,7 @@ export const ExcelImport = () => {
       {importResult && (
         <div style={{
           backgroundColor: '#ecfdf5', border: '1px solid #a7f3d0',
-          padding: '24px', borderRadius: '12px', marginBottom: '28px',
+          padding: '28px 24px', borderRadius: '12px', marginBottom: '28px',
           textAlign: 'center'
         }}>
           <div style={{
@@ -125,21 +129,87 @@ export const ExcelImport = () => {
             <FileCheck size={28} />
           </div>
           <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#065f46' }}>
-            Batch Import Successful!
+            Batch Import & Autonomous Lifecycle Initiated!
           </h2>
-          <p style={{ color: '#047857', fontSize: '14px', marginTop: '6px' }}>
-            {importResult.message}
+          <p style={{ color: '#047857', fontSize: '14px', marginTop: '6px', maxWidth: '600px', margin: '6px auto 0' }}>
+            {importResult.message || `Successfully imported records. Durable background workflows, welcome emails, and AI task allocations have been initialized.`}
           </p>
-          <div style={{ marginTop: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '20px', flexWrap: 'wrap' }}>
+            <Link
+              to="/admin/automation"
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              <Cpu size={16} />
+              <span>Monitor in Automation Center</span>
+            </Link>
+
+            <Link
+              to="/admin/interns"
+              className="btn btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: '#ffffff' }}
+            >
+              <Users size={16} />
+              <span>View Intern Directory</span>
+            </Link>
+
             <button
               onClick={() => { setFile(null); setImportResult(null); }}
-              className="btn btn-primary"
+              className="btn btn-secondary"
+              style={{ backgroundColor: '#ffffff' }}
             >
               Upload Another Spreadsheet
             </button>
           </div>
         </div>
       )}
+
+      {/* Download Template Banner */}
+      <div style={{
+        backgroundColor: '#e0e7ff', border: '1px solid #c7d2fe',
+        borderRadius: '12px', padding: '18px 24px', marginBottom: '24px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '42px', height: '42px', borderRadius: '10px',
+            backgroundColor: '#4338ca', color: 'white', display: 'flex',
+            alignItems: 'center', justifyContent: 'center'
+          }}>
+            <FileSpreadsheet size={24} />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#1e1b4b' }}>
+              Download Pre-Formatted Task Assignment Spreadsheet
+            </h3>
+            <p style={{ fontSize: '13px', color: '#4338ca', marginTop: '2px' }}>
+              Pre-filled with candidate columns, realistic project specs, and sample assignments ready for immediate testing.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <a
+            href="http://localhost:8000/api/imports/download-template"
+            download="candidate_task_assignment.xlsx"
+            className="btn btn-primary"
+            style={{ textDecoration: 'none' }}
+          >
+            <Download size={16} />
+            <span>Download Excel (.xlsx)</span>
+          </a>
+
+          <a
+            href="http://localhost:8000/api/imports/download-xml-template"
+            download="candidate_task_assignment.xml"
+            className="btn btn-secondary"
+            style={{ textDecoration: 'none', borderColor: '#4338ca', color: '#4338ca' }}
+          >
+            <Download size={16} />
+            <span>Download XML (.xml)</span>
+          </a>
+        </div>
+      </div>
 
       {/* Step 1: Upload Card */}
       {!preview && !importResult && (
@@ -308,6 +378,34 @@ export const ExcelImport = () => {
             </div>
           </div>
 
+          {/* Autonomous Lifecycle Action Notice */}
+          <div style={{
+            padding: '16px 20px',
+            backgroundColor: '#fff7ed',
+            borderRadius: '12px',
+            border: '1px solid #fed7aa',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '14px'
+          }}>
+            <div style={{
+              width: '38px', height: '38px', borderRadius: '8px',
+              backgroundColor: '#ea580c', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', color: '#ffffff', flexShrink: 0
+            }}>
+              ⚡
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '14px', color: '#9a3412' }}>
+                Automated Lifecycle Execution Ready
+              </div>
+              <div style={{ fontSize: '12px', color: '#c2410c', marginTop: '2px' }}>
+                Upon confirmation, the background workflow engine will immediately register users, initialize persistent workflows, dispatch personalized welcome emails, and auto-queue Google Meet review scheduling. Zero manual routine steps required.
+              </div>
+            </div>
+          </div>
+
           {/* Explicit Confirmation Actions */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <button
@@ -323,10 +421,10 @@ export const ExcelImport = () => {
               className="btn btn-primary"
               style={{ padding: '12px 28px', fontSize: '15px' }}
             >
-              {importing ? 'Importing into Database...' : (
+              {importing ? 'Importing & Launching Lifecycle...' : (
                 <>
                   <Check size={18} />
-                  <span>Confirm & Import ({preview.valid_rows} Valid Records)</span>
+                  <span>Confirm & Launch Automation ({preview.valid_rows} Valid Records)</span>
                 </>
               )}
             </button>

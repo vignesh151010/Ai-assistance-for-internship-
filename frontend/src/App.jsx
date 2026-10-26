@@ -15,6 +15,9 @@ import { TaskManagement } from './pages/admin/TaskManagement';
 import { ReviewScheduler } from './pages/admin/ReviewScheduler';
 import { CertificatesList } from './pages/admin/CertificatesList';
 import { NotificationsAudit } from './pages/admin/NotificationsAudit';
+import { AutomationCenter } from './pages/admin/AutomationCenter';
+import { SystemSettings } from './pages/admin/SystemSettings';
+import { AnalyticsReports } from './pages/admin/AnalyticsReports';
 
 // Mentor Pages
 import { MentorDashboard } from './pages/mentor/MentorDashboard';
@@ -49,12 +52,15 @@ export default function App() {
           {/* Admin Protected Routes */}
           <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/automation" element={<AutomationCenter />} />
             <Route path="/admin/import" element={<ExcelImport />} />
             <Route path="/admin/interns" element={<InternManagement />} />
             <Route path="/admin/tasks" element={<TaskManagement />} />
             <Route path="/admin/reviews" element={<ReviewScheduler />} />
             <Route path="/admin/certificates" element={<CertificatesList />} />
+            <Route path="/admin/reports" element={<AnalyticsReports />} />
             <Route path="/admin/notifications" element={<NotificationsAudit />} />
+            <Route path="/admin/settings" element={<SystemSettings />} />
           </Route>
 
           {/* Mentor Protected Routes */}

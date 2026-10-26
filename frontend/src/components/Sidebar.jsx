@@ -12,7 +12,10 @@ import {
   CheckCircle,
   FileText,
   ShieldCheck,
-  Briefcase
+  Briefcase,
+  Cpu,
+  BarChart3,
+  Settings
 } from 'lucide-react';
 
 export const Sidebar = () => {
@@ -36,6 +39,12 @@ export const Sidebar = () => {
               <NavLink to="/admin" end className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
                 <LayoutDashboard size={18} />
                 <span>Admin Dashboard</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/automation" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
+                <Cpu size={18} />
+                <span>Automation Center</span>
               </NavLink>
             </li>
             <li>
@@ -69,9 +78,21 @@ export const Sidebar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to="/admin/reports" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
+                <BarChart3 size={18} />
+                <span>Analytics & Reports</span>
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/admin/notifications" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
                 <Bell size={18} />
                 <span>Notifications & Audit</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/settings" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
+                <Settings size={18} />
+                <span>System Settings</span>
               </NavLink>
             </li>
           </>

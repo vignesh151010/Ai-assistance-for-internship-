@@ -1,6 +1,7 @@
 import os
 import secrets
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.config import settings
@@ -13,6 +14,40 @@ router = APIRouter(prefix="/imports", tags=["Excel Import"])
 
 # Temporary cache for uploaded files pending confirmation
 UPLOADED_CACHE = {}
+
+@router.get("/download-template")
+def download_excel_template():
+    """Download ready-to-use candidate task assignment Excel template (.xlsx)"""
+    candidate_paths = [
+        os.path.abspath(os.path.join(settings.BASE_DIR, "candidate_task_assignment.xlsx")),
+        os.path.abspath(os.path.join(settings.BASE_DIR, "..", "candidate_task_assignment.xlsx")),
+        os.path.abspath(os.path.join(os.getcwd(), "candidate_task_assignment.xlsx")),
+    ]
+    for path in candidate_paths:
+        if os.path.exists(path):
+            return FileResponse(
+                path=path,
+                filename="candidate_task_assignment.xlsx",
+                media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Template file not found.")
+
+@router.get("/download-xml-template")
+def download_xml_template():
+    """Download candidate task assignment XML Spreadsheet (.xml)"""
+    candidate_paths = [
+        os.path.abspath(os.path.join(settings.BASE_DIR, "candidate_task_assignment.xml")),
+        os.path.abspath(os.path.join(settings.BASE_DIR, "..", "candidate_task_assignment.xml")),
+        os.path.abspath(os.path.join(os.getcwd(), "candidate_task_assignment.xml")),
+    ]
+    for path in candidate_paths:
+        if os.path.exists(path):
+            return FileResponse(
+                path=path,
+                filename="candidate_task_assignment.xml",
+                media_type="application/xml"
+            )
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="XML template file not found.")
 
 @router.post("/preview", response_model=ExcelPreviewResponse)
 async def preview_excel_file(

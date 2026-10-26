@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>TechMentorship System</Author>
+  <Title>Candidate Task Assignment Sheet</Title>
+  <Created>2026-10-26T12:00:00Z</Created>
+ </DocumentProperties>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="Header">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#4338CA"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#4338CA"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#4338CA"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#4338CA"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+   <Interior ss:Color="#312E81" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="RowEven">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Color="#1E293B"/>
+   <Interior ss:Color="#F8FAFC" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="RowOdd">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Color="#1E293B"/>
+   <Interior ss:Color="#FFFFFF" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Candidate Task Assignments">
+  <Table ss:DefaultRowHeight="20">
+   <Column ss:Width="120"/>
+   <Column ss:Width="160"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="200"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="260"/>
+   <Column ss:Width="220"/>
+   <Column ss:Width="150"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="160"/>
+   <Row ss:Height="28" ss:StyleID="Header">
+    <Cell><Data ss:Type="String">Candidate Name</Data></Cell>
+    <Cell><Data ss:Type="String">Candidate Email</Data></Cell>
+    <Cell><Data ss:Type="String">Internship Role</Data></Cell>
+    <Cell><Data ss:Type="String">Assigned Task</Data></Cell>
+    <Cell><Data ss:Type="String">Task Description</Data></Cell>
+    <Cell><Data ss:Type="String">Task Requirements</Data></Cell>
+    <Cell><Data ss:Type="String">Expected Deliverables</Data></Cell>
+    <Cell><Data ss:Type="String">Required Skills</Data></Cell>
+    <Cell><Data ss:Type="String">Deadline</Data></Cell>
+    <Cell><Data ss:Type="String">Internship Start Date</Data></Cell>
+    <Cell><Data ss:Type="String">Internship End Date</Data></Cell>
+    <Cell><Data ss:Type="String">Assigned Mentor</Data></Cell>
+   </Row>
+   <Row ss:Height="40" ss:StyleID="RowEven">
+    <Cell><Data ss:Type="String">Rohan Verma</Data></Cell>
+    <Cell><Data ss:Type="String">rohan.verma@example.com</Data></Cell>
+    <Cell><Data ss:Type="String">Frontend Engineer Intern</Data></Cell>
+    <Cell><Data ss:Type="String">Responsive Developer Portfolio Platform</Data></Cell>
+    <Cell><Data ss:Type="String">Design and build an accessible, highly-aesthetic developer portfolio displaying project showcases, skills matrix, and interactive contact modal.</Data></Cell>
+    <Cell><Data ss:Type="String">Must be responsive across mobile/desktop; CSS Grid/Flexbox; Interactive project filtering; Form validation with visual feedback; Clean GitHub repo.</Data></Cell>
+    <Cell><Data ss:Type="String">Production bundle, source files, automated test verification, README with deployment notes.</Data></Cell>
+    <Cell><Data ss:Type="String">React, CSS3, JavaScript, HTML5, Git</Data></Cell>
+    <Cell><Data ss:Type="String">2026-11-15</Data></Cell>
+    <Cell><Data ss:Type="String">2026-10-01</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-31</Data></Cell>
+    <Cell><Data ss:Type="String">mentor@techcorp.com</Data></Cell>
+   </Row>
+   <Row ss:Height="40" ss:StyleID="RowOdd">
+    <Cell><Data ss:Type="String">Priya Sundaram</Data></Cell>
+    <Cell><Data ss:Type="String">priya.sundaram@example.com</Data></Cell>
+    <Cell><Data ss:Type="String">Backend Systems Intern</Data></Cell>
+    <Cell><Data ss:Type="String">Distributed Event Ingestion & Rate Limiting Microservice</Data></Cell>
+    <Cell><Data ss:Type="String">Implement high-throughput API gateway middleware supporting sliding-window rate limiting, token bucket algorithms, and Redis-backed state.</Data></Cell>
+    <Cell><Data ss:Type="String">P99 latency under 15ms; Unit tests > 85% coverage; Docker containerization; Comprehensive OpenAPI specification.</Data></Cell>
+    <Cell><Data ss:Type="String">FastAPI microservice code, Dockerfile, benchmark test suite report, architecture diagram.</Data></Cell>
+    <Cell><Data ss:Type="String">Python, FastAPI, Redis, Docker, Pytest</Data></Cell>
+    <Cell><Data ss:Type="String">2026-11-20</Data></Cell>
+    <Cell><Data ss:Type="String">2026-10-01</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-31</Data></Cell>
+    <Cell><Data ss:Type="String">mentor@techcorp.com</Data></Cell>
+   </Row>
+   <Row ss:Height="40" ss:StyleID="RowEven">
+    <Cell><Data ss:Type="String">Ananya Sen</Data></Cell>
+    <Cell><Data ss:Type="String">ananya.sen@example.com</Data></Cell>
+    <Cell><Data ss:Type="String">AI & Data Science Intern</Data></Cell>
+    <Cell><Data ss:Type="String">Automated Document Summarization & Sentiment Pipeline</Data></Cell>
+    <Cell><Data ss:Type="String">Develop an NLP pipeline capable of extracting key entities, generating concise abstracts, and evaluating sentiment from enterprise PDF reports.</Data></Cell>
+    <Cell><Data ss:Type="String">Multi-format document ingestion (PDF, TXT); Entity extraction with confidence scores; Unit tests covering edge cases.</Data></Cell>
+    <Cell><Data ss:Type="String">Python pipeline module, Jupyter demo notebook, evaluation benchmark summary.</Data></Cell>
+    <Cell><Data ss:Type="String">Python, Transformers, PyTorch, Pandas, Scikit-learn</Data></Cell>
+    <Cell><Data ss:Type="String">2026-11-25</Data></Cell>
+    <Cell><Data ss:Type="String">2026-10-01</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-31</Data></Cell>
+    <Cell><Data ss:Type="String">mentor@techcorp.com</Data></Cell>
+   </Row>
+   <Row ss:Height="40" ss:StyleID="RowOdd">
+    <Cell><Data ss:Type="String">Vikram Malhotra</Data></Cell>
+    <Cell><Data ss:Type="String">vikram.malhotra@example.com</Data></Cell>
+    <Cell><Data ss:Type="String">Cloud DevOps Intern</Data></Cell>
+    <Cell><Data ss:Type="String">Automated CI/CD Pipeline & Kubernetes Deployment Helm Chart</Data></Cell>
+    <Cell><Data ss:Type="String">Construct robust GitHub Actions workflow automating linting, security scans, unit tests, Docker container builds, and deployment to local Minikube cluster.</Data></Cell>
+    <Cell><Data ss:Type="String">Zero plaintext secrets; Multi-stage Docker builds; Helm chart with configurable values.yaml; Rollback strategy.</Data></Cell>
+    <Cell><Data ss:Type="String">GitHub Actions workflows, Helm chart directory, documentation and deployment verification log.</Data></Cell>
+    <Cell><Data ss:Type="String">Docker, Kubernetes, Helm, GitHub Actions, Linux</Data></Cell>
+    <Cell><Data ss:Type="String">2026-11-30</Data></Cell>
+    <Cell><Data ss:Type="String">2026-10-01</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-31</Data></Cell>
+    <Cell><Data ss:Type="String">mentor@techcorp.com</Data></Cell>
+   </Row>
+   <Row ss:Height="40" ss:StyleID="RowEven">
+    <Cell><Data ss:Type="String">Sneha Kulkarni</Data></Cell>
+    <Cell><Data ss:Type="String">sneha.kulkarni@example.com</Data></Cell>
+    <Cell><Data ss:Type="String">Cybersecurity & QA Intern</Data></Cell>
+    <Cell><Data ss:Type="String">Automated API Vulnerability & OWASP ZAP Security Scanner</Data></Cell>
+    <Cell><Data ss:Type="String">Build automated vulnerability test suite integrating OWASP Top 10 security checks, input fuzzing, and JWT tampering verification against REST APIs.</Data></Cell>
+    <Cell><Data ss:Type="String">Detect XSS, SQLi, and IDOR vulnerabilities; Automated vulnerability scoring; HTML and JSON audit report output.</Data></Cell>
+    <Cell><Data ss:Type="String">Security test scripts, OWASP configuration profile, vulnerability report sample.</Data></Cell>
+    <Cell><Data ss:Type="String">Python, OWASP ZAP, Security Testing, Burp Suite, Bash</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-05</Data></Cell>
+    <Cell><Data ss:Type="String">2026-10-01</Data></Cell>
+    <Cell><Data ss:Type="String">2026-12-31</Data></Cell>
+    <Cell><Data ss:Type="String">mentor@techcorp.com</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>

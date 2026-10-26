@@ -4,12 +4,12 @@
    ========================================================================== */
 
 :root {
-  --primary: #4338ca;         /* Indigo 700 */
-  --primary-hover: #3730a3;   /* Indigo 800 */
-  --primary-light: #e0e7ff;   /* Indigo 100 */
-  --secondary: #2563eb;       /* Blue 600 */
-  --secondary-hover: #1d4ed8; /* Blue 700 */
-  --secondary-light: #dbeafe; /* Blue 100 */
+  --primary: #ea580c;         /* Dark Orange */
+  --primary-hover: #c2410c;   /* Deep Orange */
+  --primary-light: #ffedd5;   /* Light Orange Accent */
+  --secondary: #f97316;       /* Primary Orange */
+  --secondary-hover: #ea580c; /* Hover */
+  --secondary-light: #fff7ed; /* Soft Orange */
   
   --bg-main: #f8fafc;         /* Slate 50 */
   --bg-surface: #ffffff;      /* White */

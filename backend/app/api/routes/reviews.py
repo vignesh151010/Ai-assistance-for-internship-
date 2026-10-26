@@ -13,6 +13,7 @@ from app.api.deps import get_current_user, require_mentor
 from app.integrations.google_calendar import calendar_service
 from app.integrations.email_provider import email_provider, EmailTemplates
 from app.integrations.ai_provider import ai_service
+from app.services.workflow_engine import WorkflowEngineService, JOB_PROCESS_REVIEW_DECISION
 from app.schemas.all_schemas import (
     ReviewScheduleRequest, ReviewSessionResponse, ReviewDecisionRequest,
     ReviewAttendanceCheckInRequest
@@ -309,6 +310,16 @@ def record_review_decision(
     # Update progress
     if payload.review_outcome in (ReviewOutcome.APPROVED, ReviewOutcome.APPROVED_WITH_MINOR_CHANGES):
         review.intern.progress_percentage = min(100.0, review.intern.progress_percentage + 30.0)
+
+    # Automatically advance workflow lifecycle
+    WorkflowEngineService.queue_job(
+        db=db,
+        job_type=JOB_PROCESS_REVIEW_DECISION,
+        intern_id=review.intern_id,
+        review_session_id=review.id,
+        priority=15,
+        idempotency_key=f"rev_decision_{review.id}"
+    )
 
     db.commit()
 

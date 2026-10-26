@@ -3,8 +3,12 @@ from datetime import datetime
 from typing import List, Dict, Any, Tuple
 import openpyxl
 from sqlalchemy.orm import Session
-from app.models.entities import User, UserRole, InternProfile, Task, TaskAssignment, TaskStatus, ImportBatch, ImportError, AuditLog
+from app.models.entities import (
+    User, UserRole, InternProfile, Task, TaskAssignment, TaskStatus,
+    ImportBatch, ImportError, AuditLog, InternWorkflow, WorkflowStage
+)
 from app.core.security import get_password_hash
+from app.services.workflow_engine import WorkflowEngineService, JOB_ONBOARD_INTERN
 
 EMAIL_REGEX = r"^[\w\.-]+@[\w\.-]+\.\w+$"
 
@@ -240,6 +244,35 @@ class ExcelImportService:
             )
             db.add(assignment)
             db.flush()
+
+            # 5. Initialize Workflow and Queue Onboarding Job
+            wf = InternWorkflow(
+                intern_id=intern_profile.id,
+                current_stage=WorkflowStage.ONBOARDING_PENDING,
+                is_active=True,
+                auto_pilot=True,
+                last_action="EXCEL_IMPORT",
+                last_action_at=datetime.utcnow(),
+                history_json=[{
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "stage": WorkflowStage.IMPORTED.value,
+                    "action": "IMPORTED_FROM_EXCEL",
+                    "status": "SUCCESS",
+                    "details": f"Imported candidate from {batch.original_filename}"
+                }]
+            )
+            db.add(wf)
+            db.flush()
+
+            # Queue onboarding job
+            WorkflowEngineService.queue_job(
+                db=db,
+                job_type=JOB_ONBOARD_INTERN,
+                intern_id=intern_profile.id,
+                task_assignment_id=assignment.id,
+                priority=10,
+                idempotency_key=f"onboard_intern_{intern_profile.id}"
+            )
 
             imported_count += 1
 

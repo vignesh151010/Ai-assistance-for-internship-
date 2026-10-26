@@ -57,6 +57,48 @@ class DeliveryStatus(str, enum.Enum):
     FAILED = "FAILED"
     DELIVERED = "DELIVERED"
 
+class WorkflowStage(str, enum.Enum):
+    IMPORTED = "IMPORTED"
+    ONBOARDING_PENDING = "ONBOARDING_PENDING"
+    ONBOARDING_SENT = "ONBOARDING_SENT"
+    TASK_ASSIGNED = "TASK_ASSIGNED"
+    IN_PROGRESS = "IN_PROGRESS"
+    SUBMISSION_PENDING = "SUBMISSION_PENDING"
+    SUBMITTED = "SUBMITTED"
+    AI_EVALUATION_PENDING = "AI_EVALUATION_PENDING"
+    AI_EVALUATION_COMPLETE = "AI_EVALUATION_COMPLETE"
+    REVIEW_SCHEDULED = "REVIEW_SCHEDULED"
+    REVIEW_IN_PROGRESS = "REVIEW_IN_PROGRESS"
+    CHANGES_REQUIRED = "CHANGES_REQUIRED"
+    RESUBMISSION_PENDING = "RESUBMISSION_PENDING"
+    REVIEW_APPROVED = "REVIEW_APPROVED"
+    NEXT_REVIEW_PENDING = "NEXT_REVIEW_PENDING"
+    COMPLETION_CHECK = "COMPLETION_CHECK"
+    COMPLETED = "COMPLETED"
+    CERTIFICATE_PENDING = "CERTIFICATE_PENDING"
+    CERTIFICATE_ISSUED = "CERTIFICATE_ISSUED"
+    FINAL_EMAIL_SENT = "FINAL_EMAIL_SENT"
+    CLOSED = "CLOSED"
+    PAUSED = "PAUSED"
+    NEEDS_ADMIN_ATTENTION = "NEEDS_ADMIN_ATTENTION"
+    FAILED = "FAILED"
+    # Legacy alias support
+    ONBOARDING = "ONBOARDING"
+    UNDER_EVALUATION = "UNDER_EVALUATION"
+    REVIEW_COMPLETED = "REVIEW_COMPLETED"
+    IMPROVEMENT_CYCLE = "IMPROVEMENT_CYCLE"
+    COMPLETION_ELIGIBLE = "COMPLETION_ELIGIBLE"
+    PAUSED_EXCEPTION = "PAUSED_EXCEPTION"
+    DROPPED = "DROPPED"
+
+class JobStatus(str, enum.Enum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    SUCCESS = "SUCCESS"
+    FAILED = "FAILED"
+    RETRY_SCHEDULED = "RETRY_SCHEDULED"
+    PAUSED_EXCEPTION = "PAUSED_EXCEPTION"
+
 class User(Base):
     __tablename__ = "users"
 
@@ -100,6 +142,7 @@ class InternProfile(Base):
     reviews = relationship("ReviewSession", back_populates="intern")
     certificates = relationship("Certificate", back_populates="intern")
     improvement_actions = relationship("ImprovementAction", back_populates="intern")
+    workflow = relationship("InternWorkflow", back_populates="intern", uselist=False, cascade="all, delete-orphan")
 
 class MentorProfile(Base):
     __tablename__ = "mentor_profiles"
@@ -381,3 +424,77 @@ class AuditLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="audit_logs")
+
+class InternWorkflow(Base):
+    __tablename__ = "intern_workflows"
+
+    id = Column(Integer, primary_key=True, index=True)
+    intern_id = Column(Integer, ForeignKey("intern_profiles.id"), unique=True, nullable=False)
+    current_stage = Column(Enum(WorkflowStage), default=WorkflowStage.ONBOARDING, nullable=False)
+    is_active = Column(Boolean, default=True)
+    auto_pilot = Column(Boolean, default=True)
+    last_action = Column(String(255), nullable=True)
+    last_action_at = Column(DateTime, nullable=True)
+    next_scheduled_action = Column(String(255), nullable=True)
+    next_scheduled_run_at = Column(DateTime, nullable=True)
+    retry_count = Column(Integer, default=0)
+    max_retries = Column(Integer, default=5)
+    last_error = Column(Text, nullable=True)
+    error_category = Column(String(50), nullable=True)  # RECOVERABLE, PERMANENT, CREDENTIAL_REQUIRED, HUMAN_APPROVAL_REQUIRED
+    history_json = Column(JSON, default=list)  # list of {timestamp, stage, action, status, details, execution_id}
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    intern = relationship("InternProfile", back_populates="workflow")
+
+class WorkflowJob(Base):
+    __tablename__ = "workflow_jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    job_type = Column(String(100), index=True, nullable=False)
+    intern_id = Column(Integer, ForeignKey("intern_profiles.id"), nullable=True)
+    task_assignment_id = Column(Integer, ForeignKey("task_assignments.id"), nullable=True)
+    submission_id = Column(Integer, ForeignKey("task_submissions.id"), nullable=True)
+    review_session_id = Column(Integer, ForeignKey("review_sessions.id"), nullable=True)
+    status = Column(Enum(JobStatus), default=JobStatus.QUEUED, index=True, nullable=False)
+    priority = Column(Integer, default=0)
+    payload_json = Column(JSON, default=dict)
+    attempt_count = Column(Integer, default=0)
+    max_attempts = Column(Integer, default=4)
+    backoff_seconds = Column(Integer, default=10)
+    next_run_at = Column(DateTime, default=datetime.utcnow, index=True, nullable=False)
+    idempotency_key = Column(String(120), unique=True, index=True, nullable=True)
+    last_error = Column(Text, nullable=True)
+    error_category = Column(String(50), nullable=True)
+    external_reference_id = Column(String(255), nullable=True)
+    started_at = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    intern = relationship("InternProfile")
+    task_assignment = relationship("TaskAssignment")
+    submission = relationship("TaskSubmission")
+    review_session = relationship("ReviewSession")
+
+class AutomationPolicy(Base):
+    __tablename__ = "automation_policies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    key = Column(String(100), unique=True, index=True, nullable=False)
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    enabled = Column(Boolean, default=True, nullable=False)
+    parameters_json = Column(JSON, default=dict)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class SystemSetting(Base):
+    __tablename__ = "system_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    key = Column(String(100), unique=True, index=True, nullable=False)
+    value_json = Column(JSON, nullable=False)
+    description = Column(String(255), nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+

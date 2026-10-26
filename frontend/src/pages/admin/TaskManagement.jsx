@@ -9,7 +9,8 @@ import {
   Clock,
   ListOrdered,
   AlertTriangle,
-  ChevronRight
+  ChevronRight,
+  Download
 } from 'lucide-react';
 
 export const TaskManagement = () => {
@@ -108,10 +109,21 @@ export const TaskManagement = () => {
             Curate technical specifications, inspect AI-generated beginner roadmaps, and dispatch tailored onboarding emails.
           </p>
         </div>
-        <button onClick={() => setShowCreateModal(true)} className="btn btn-primary">
-          <Plus size={16} />
-          <span>New Task Specification</span>
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <a
+            href="http://localhost:8000/api/imports/download-template"
+            download="candidate_task_assignment.xlsx"
+            className="btn btn-secondary"
+            style={{ textDecoration: 'none' }}
+          >
+            <Download size={16} />
+            <span>Download Excel Template (.xlsx)</span>
+          </a>
+          <button onClick={() => setShowCreateModal(true)} className="btn btn-primary">
+            <Plus size={16} />
+            <span>New Task Specification</span>
+          </button>
+        </div>
       </div>
 
       {message && (

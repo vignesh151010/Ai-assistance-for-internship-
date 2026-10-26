@@ -1,5 +1,15 @@
+import os
+import pytest
 import requests
 
+def is_live_server_running():
+    try:
+        r = requests.get('http://127.0.0.1:8000/api/health', timeout=0.8)
+        return r.status_code == 200
+    except Exception:
+        return False
+
+@pytest.mark.skipif(not is_live_server_running(), reason="Live server not running on localhost:8000")
 def test_live_lifecycle():
     # 1. Login
     login_res = requests.post('http://127.0.0.1:8000/api/auth/login', json={'email': 'admin@techcorp.com', 'password': 'Admin@2026Secure!'})
@@ -9,7 +19,11 @@ def test_live_lifecycle():
     print("1. Authenticated as Admin.")
 
     # 2. Preview Excel
-    with open('sample_interns_tasks.xlsx', 'rb') as f:
+    sample_path = 'sample_interns_tasks.xlsx'
+    if not os.path.exists(sample_path):
+        sample_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'sample_interns_tasks.xlsx'))
+    
+    with open(sample_path, 'rb') as f:
         prev_res = requests.post(
             'http://127.0.0.1:8000/api/imports/preview',
             headers=headers,

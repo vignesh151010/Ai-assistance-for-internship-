@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from openpyxl import Workbook
 
 from app.core.database import Base, get_db
-from app.main import app, on_startup
+from app.main import app
 from app.models.entities import User, UserRole, InternProfile, Task, TaskAssignment, TaskStatus, ReviewSession, Certificate
 from app.core.security import get_password_hash
 from app.integrations.certificate_generator import certificate_generator
@@ -28,11 +28,11 @@ def override_get_db():
     finally:
         db.close()
 
-app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def setup_database():
+    app.dependency_overrides[get_db] = override_get_db
     Base.metadata.create_all(bind=test_engine)
     db = TestingSessionLocal()
 

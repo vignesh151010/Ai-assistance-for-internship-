@@ -9,10 +9,12 @@ from app.core.database import get_db
 from app.core.config import settings
 from app.models.entities import (
     User, UserRole, InternProfile, TaskAssignment, TaskStatus,
-    TaskSubmission, SubmissionFile, AIEvaluation, AITaskAnalysis
+    TaskSubmission, SubmissionFile, AIEvaluation, AITaskAnalysis,
+    InternWorkflow, WorkflowStage
 )
 from app.api.deps import get_current_user
 from app.integrations.ai_provider import ai_service
+from app.services.workflow_engine import WorkflowEngineService
 from app.schemas.all_schemas import TaskSubmissionResponse, AIEvaluationResponse, EvaluationCriterionResult
 
 router = APIRouter(prefix="/submissions", tags=["Submissions & AI Evaluation"])
@@ -137,8 +139,17 @@ async def upload_task_submission(
     db.add(evaluation)
     submission.status = "EVALUATED"
 
-    # Update intern progress
+    # Update intern progress and workflow history
     profile.progress_percentage = min(100.0, profile.progress_percentage + 25.0)
+
+    wf = WorkflowEngineService.get_or_create_workflow(db, profile.id)
+    WorkflowEngineService.append_workflow_history(
+        wf,
+        WorkflowStage.AI_EVALUATION_COMPLETE,
+        "SUBMISSION_EVALUATED",
+        "SUCCESS",
+        f"Version {submission.version} deliverables evaluated with score {ai_result['overall_score']}/100."
+    )
 
     db.commit()
     db.refresh(submission)
